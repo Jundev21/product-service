@@ -1,9 +1,7 @@
 package com.example.product_service.application.port.in;
 
-import com.example.product_service.domain.model.Product;
-
 public interface ProductInventoryUseCase {
-    void decreaseStocks(int stocks);
+    void decreaseStocks(Long productId, int quantity);
 
-    void increaseStocks(int stocks);
+    void increaseStocks(Long productId, int quantity);
 }
