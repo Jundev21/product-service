@@ -1,17 +1,32 @@
+server:
+  port: 8081
+
 spring:
+
   datasource:
     url: jdbc:mysql://localhost:3306/products_service
     username: root
     password: 1234
+
   jpa:
     hibernate:
       ddl-auto: create
     properties:
       hibernate:
         format_sql: true
+
   Kafka:
     bootstrap-servers: localhost:9092
+    consumer:
+      group-id: product-service
+      auto-offset-reset: earliest
 
-    producer:
-      key-serializer: org.apache.kafka.common.serialization.StringSerializer
-      value-serializer: org.springframework.kafka.support.serializer.JacksonJsonSerializer
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JacksonJsonDeserializer
+
+
+#     product 에서 가져온 데이터들 dto 클레스 맞추기
+      properties:
+        "[spring.json.value.default.type]": com.example.product_service.event.OrderCreatedEvent
+        "[spring.json.trusted.packages]": com.example.product_service.event
+        "[spring.json.use.type.headers]": false

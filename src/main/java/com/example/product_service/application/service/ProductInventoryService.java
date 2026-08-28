@@ -13,7 +13,6 @@ public class ProductInventoryService implements ProductInventoryUseCase {
 
     private final ProductInventoryPort productInventoryPort;
 
-
     @Override
     @Transactional
     public void decreaseStocks(
@@ -22,9 +21,7 @@ public class ProductInventoryService implements ProductInventoryUseCase {
     ) {
 
         if (quantity <= 0) {
-            throw new IllegalArgumentException(
-                    "차감 수량은 0보다 커야 합니다."
-            );
+            throw new IllegalArgumentException("차감 수량은 0보다 커야 합니다.");
         }
 
         boolean success =
@@ -34,9 +31,7 @@ public class ProductInventoryService implements ProductInventoryUseCase {
                 );
 
         if (!success) {
-            throw new IllegalStateException(
-                    "상품이 없거나 재고가 부족합니다."
-            );
+            throw new IllegalStateException("상품이 없거나 재고가 부족합니다.");
         }
     }
 
