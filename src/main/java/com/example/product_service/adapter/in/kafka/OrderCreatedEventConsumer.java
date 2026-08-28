@@ -1,6 +1,6 @@
 package com.example.product_service.adapter.in.kafka;
 
-import com.example.product_service.application.port.in.ProductInventoryUseCase;
+import com.example.product_service.application.port.in.ProcessOrderInventoryUseCase;
 import com.example.product_service.event.OrderCreatedEvent;
 import lombok.RequiredArgsConstructor;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class OrderCreatedEventConsumer {
 
-    private final ProductInventoryUseCase productInventoryUseCase;
+    private final ProcessOrderInventoryUseCase processOrderInventoryUseCase;
 
     @KafkaListener(
             topics = "order-created",
@@ -18,11 +18,8 @@ public class OrderCreatedEventConsumer {
     )
     public void consume(OrderCreatedEvent event) {
 
-        System.out.println(
-                "OrderCreatedEvent 수신: " + event
-        );
-
-        productInventoryUseCase.decreaseStocks(
+        processOrderInventoryUseCase.process(
+                event.orderId(),
                 event.goodsId(),
                 event.quantity()
         );

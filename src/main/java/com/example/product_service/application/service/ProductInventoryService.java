@@ -20,6 +20,12 @@ public class ProductInventoryService implements ProductInventoryUseCase {
             int quantity
     ) {
 
+        boolean findProducts = productInventoryPort.existsById(productId);
+
+        if (!findProducts) {
+            throw new IllegalStateException("해당 상품 없습니다.");
+        }
+
         if (quantity <= 0) {
             throw new IllegalArgumentException("차감 수량은 0보다 커야 합니다.");
         }

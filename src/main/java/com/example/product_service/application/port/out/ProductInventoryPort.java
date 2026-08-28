@@ -5,4 +5,6 @@ public interface ProductInventoryPort {
             Long productId,
             int quantity
     );
+
+    boolean existsById(Long productId);
 }

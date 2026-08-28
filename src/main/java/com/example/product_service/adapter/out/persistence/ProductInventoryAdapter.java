@@ -10,13 +10,16 @@ public class ProductInventoryAdapter implements ProductInventoryPort {
 
     private final ProductRepository productRepository;
 
-
-    //제고 차감할때 비관적락을 사용해서 데이터 정합성을 맞게한다.
+    //재고 차감할때 비관적락을 사용해서 데이터 정합성을 맞게한다.
     @Override
     public boolean decreaseInventory(Long productId, int quantity) {
-
         return productRepository.decreaseInventory(
                 productId, quantity
         ) == 1;
+    }
+
+    @Override
+    public boolean existsById(Long productId) {
+        return productRepository.existsById(productId);
     }
 }
