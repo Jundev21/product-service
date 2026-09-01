@@ -45,4 +45,5 @@ public class ProductInventoryService implements ProductInventoryUseCase {
     public void increaseStocks(Long productId, int quantity) {
 
     }
+
 }

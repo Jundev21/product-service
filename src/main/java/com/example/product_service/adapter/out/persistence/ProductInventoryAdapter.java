@@ -22,4 +22,5 @@ public class ProductInventoryAdapter implements ProductInventoryPort {
     public boolean existsById(Long productId) {
         return productRepository.existsById(productId);
     }
+
 }

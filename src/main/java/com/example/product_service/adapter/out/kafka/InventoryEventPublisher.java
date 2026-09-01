@@ -12,10 +12,13 @@ import org.springframework.stereotype.Component;
 public class InventoryEventPublisher implements InventoryEventPort {
 
     private static final String DECREASED_TOPIC = "inventory-decreased";
-
     private static final String DECREASE_FAILED_TOPIC = "inventory-decrease-failed";
-
     private final KafkaTemplate<String, Object> kafkaTemplate;
+
+    @Override
+    public boolean isDuplicateEvent(String eventId) {
+        return false;
+    }
 
     @Override
     public void publishDecreased(InventoryDecreasedEvent event) {

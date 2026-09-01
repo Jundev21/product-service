@@ -19,6 +19,7 @@ public class OrderCreatedEventConsumer {
     public void consume(OrderCreatedEvent event) {
 
         processOrderInventoryUseCase.process(
+                event.eventId(),
                 event.orderId(),
                 event.goodsId(),
                 event.quantity()

@@ -5,6 +5,8 @@ import com.example.product_service.event.InventoryDecreasedEvent;
 
 public interface InventoryEventPort {
 
+    boolean isDuplicateEvent(String eventId);
+
     void publishDecreased(
             InventoryDecreasedEvent event
     );

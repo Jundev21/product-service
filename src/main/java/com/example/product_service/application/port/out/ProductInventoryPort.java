@@ -7,4 +7,5 @@ public interface ProductInventoryPort {
     );
 
     boolean existsById(Long productId);
+
 }
