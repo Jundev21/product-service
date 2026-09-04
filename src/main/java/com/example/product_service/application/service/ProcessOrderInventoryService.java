@@ -5,6 +5,7 @@ import com.example.product_service.application.port.in.ProcessOrderInventoryUseC
 import com.example.product_service.application.port.in.ProductInventoryUseCase;
 import com.example.product_service.application.port.out.EventPort;
 import com.example.product_service.application.port.out.InventoryEventPort;
+import com.example.product_service.domain.model.Product;
 import com.example.product_service.event.InventoryDecreaseFailedEvent;
 import com.example.product_service.event.InventoryDecreasedEvent;
 import jakarta.transaction.Transactional;
@@ -31,14 +32,15 @@ public class ProcessOrderInventoryService implements ProcessOrderInventoryUseCas
         if (eventPort.existsByEventId(eventId)) return;
 
         try {
-            productInventoryUseCase.decreaseStocks(productId, quantity);
+            Product successDecreaseStocks = productInventoryUseCase.decreaseStocks(productId, quantity);
             eventPort.save(eventId,"decrease-stocks");
             inventoryEventPort.publishDecreased(
                     new InventoryDecreasedEvent(
                             eventId,
                             orderId,
                             productId,
-                            quantity
+                            quantity,
+                            successDecreaseStocks.getPrice()
                     )
             );
 

@@ -12,15 +12,19 @@ public class ProductInventoryAdapter implements ProductInventoryPort {
 
     //재고 차감할때 비관적락을 사용해서 데이터 정합성을 맞게한다.
     @Override
-    public boolean decreaseInventory(Long productId, int quantity) {
-        return productRepository.decreaseInventory(
-                productId, quantity
-        ) == 1;
+    public void decreaseInventory(Long productId, int quantity) {
+        int updatedRows = productRepository.decreaseInventory(productId, quantity);
+
+        if (updatedRows != 1) {
+            throw new IllegalStateException("상품이 없거나 재고가 부족합니다.");
+        }
+    }
+    @Override
+    public ProductEntity findById(Long productId) {
+        return productRepository.findById(productId).orElseThrow(
+                () -> new IllegalArgumentException("해당 상품이 없습니다.")
+        );
     }
 
-    @Override
-    public boolean existsById(Long productId) {
-        return productRepository.existsById(productId);
-    }
 
 }

@@ -1,12 +1,15 @@
 package com.example.product_service.application.service;
 
 
+import com.example.product_service.adapter.out.persistence.ProductEntity;
 import com.example.product_service.application.port.in.ProductInventoryUseCase;
 import com.example.product_service.application.port.out.ProductInventoryPort;
+import com.example.product_service.domain.model.Product;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+//재고 차감 api로 재고 확인 코드
 @Service
 @AllArgsConstructor
 public class ProductInventoryService implements ProductInventoryUseCase {
@@ -15,30 +18,16 @@ public class ProductInventoryService implements ProductInventoryUseCase {
 
     @Override
     @Transactional
-    public void decreaseStocks(
-            Long productId,
-            int quantity
-    ) {
+    public Product decreaseStocks(Long productId, int quantity) {
 
-        boolean findProducts = productInventoryPort.existsById(productId);
+        ProductEntity findProducts = productInventoryPort.findById(productId);
+        productInventoryPort.decreaseInventory(productId, quantity);
 
-        if (!findProducts) {
-            throw new IllegalStateException("해당 상품 없습니다.");
-        }
-
-        if (quantity <= 0) {
-            throw new IllegalArgumentException("차감 수량은 0보다 커야 합니다.");
-        }
-
-        boolean success =
-                productInventoryPort.decreaseInventory(
-                        productId,
-                        quantity
-                );
-
-        if (!success) {
-            throw new IllegalStateException("상품이 없거나 재고가 부족합니다.");
-        }
+        return Product.create(
+                findProducts.getProductName(),
+                findProducts.getPrice(),
+                findProducts.getStocks()
+        );
     }
 
     @Override

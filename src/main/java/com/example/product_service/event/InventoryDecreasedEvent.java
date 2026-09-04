@@ -4,6 +4,8 @@ public record InventoryDecreasedEvent(
         String eventId,
         Long orderId,
         Long goodsId,
-        int quantity
+        int quantity,
+        int price
+
 ) {
 }

@@ -20,6 +20,8 @@ public class InventoryEventPublisher implements InventoryEventPort {
         return false;
     }
 
+
+    //차감 성공했을경우에는 결제 서비스로 메세지 발행
     @Override
     public void publishDecreased(InventoryDecreasedEvent event) {
         kafkaTemplate.send(
