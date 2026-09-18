@@ -24,4 +24,16 @@ public interface ProductRepository extends JpaRepository<ProductEntity, Long> {
            \s""")
     int decreaseInventory(@Param("productId") Long productId, @Param("quantity") int quantity);
 
+    @Modifying(
+            clearAutomatically = true,
+            flushAutomatically = true
+    )
+
+    @Query("""
+            Update ProductEntity p\s
+            SET p.stocks = p.stocks + :quantity
+            WHERE p.id = :productId
+           \s""")
+    int increaseInventory(@Param("productId") Long productId, @Param("quantity") int quantity);
+
 }

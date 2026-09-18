@@ -14,19 +14,19 @@ public class ProductInventory {
 
     private final ProductInventoryUseCase productInventoryUseCase;
 
-    @PostMapping("/{productId}/inventory/decrease")
-    public ResponseEntity<Void> decreaseInventory(
-            @PathVariable Long productId,
-            @Valid @RequestBody DecreaseInventoryRequest request
-    ) {
-
-        productInventoryUseCase.decreaseStocks(
-                productId,
-                request.quantity()
-        );
-
-        return ResponseEntity.noContent().build();
-    }
+//    @PostMapping("/{productId}/inventory/decrease")
+//    public ResponseEntity<Void> decreaseInventory(
+//            @PathVariable Long productId,
+//            @Valid @RequestBody DecreaseInventoryRequest request
+//    ) {
+//
+//        productInventoryUseCase.decreaseStocks(
+//                productId,
+//                request.quantity()
+//        );
+//
+//        return ResponseEntity.noContent().build();
+//    }
 
 
 }

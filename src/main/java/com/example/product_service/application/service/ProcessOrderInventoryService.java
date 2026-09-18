@@ -1,12 +1,12 @@
 package com.example.product_service.application.service;
 
-import com.example.product_service.adapter.out.persistence.Event.EventEntity;
 import com.example.product_service.application.port.in.ProcessOrderInventoryUseCase;
 import com.example.product_service.application.port.in.ProductInventoryUseCase;
 import com.example.product_service.application.port.out.EventPort;
 import com.example.product_service.application.port.out.InventoryEventPort;
-import com.example.product_service.domain.model.Product;
+import com.example.product_service.event.EventStatus;
 import com.example.product_service.event.InventoryDecreaseFailedEvent;
+import com.example.product_service.event.InventoryDecreaseResult;
 import com.example.product_service.event.InventoryDecreasedEvent;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -29,33 +29,38 @@ public class ProcessOrderInventoryService implements ProcessOrderInventoryUseCas
             int quantity
     ) {
 
-        if (eventPort.existsByEventId(eventId)) return;
-
-        try {
-            Product successDecreaseStocks = productInventoryUseCase.decreaseStocks(productId, quantity);
-            eventPort.save(eventId,"decrease-stocks");
-            inventoryEventPort.publishDecreased(
-                    new InventoryDecreasedEvent(
-                            eventId,
-                            orderId,
-                            productId,
-                            quantity,
-                            successDecreaseStocks.getPrice()
-                    )
-            );
-
-        } catch (IllegalStateException e) {
-
-            eventPort.save(eventId,"decrease-failed");
-            inventoryEventPort.publishDecreaseFailed(
-                    new InventoryDecreaseFailedEvent(
-                            eventId,
-                            orderId,
-                            productId,
-                            quantity,
-                            e.getMessage()
-                    )
-            );
+        if (eventPort.existsByEventId(eventId)) {
+            return;
         }
+
+        InventoryDecreaseResult result = productInventoryUseCase.decreaseStocks(productId, quantity);
+
+        if (!result.success()) {
+
+            eventPort.save(eventId, EventStatus.DECREASE_FAILED);
+
+            inventoryEventPort.publishDecreaseFailed(
+                    new InventoryDecreaseFailedEvent(eventId, orderId, productId, quantity, result.reason())
+            );
+
+            return;
+        }
+
+        eventPort.save(eventId, EventStatus.DECREASE_SUCCESS);
+
+        inventoryEventPort.publishDecreased(
+                new InventoryDecreasedEvent(
+                        eventId,
+                        orderId,
+                        productId,
+                        quantity,
+                        result.product().getPrice()
+                )
+        );
+    }
+
+    @Override
+    public void failedProcess(Long orderId, Long productId, int quantity) {
+        productInventoryUseCase.increaseStocks(productId, quantity);
     }
 }

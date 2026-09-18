@@ -35,7 +35,11 @@ public class ProductPersistenceAdapter implements ProductInfoPort {
 
     @Override
     public Product searchProductDetail(Long productId) {
-        ProductEntity productEntity = productRepository.findById(productId).orElseThrow();
+
+        System.out.println("productId: " + productId);
+        ProductEntity productEntity = productRepository.findById(productId).orElseThrow(
+                () -> new IllegalArgumentException("상품없음")
+        );
         return new Product(productEntity.getProductName(), productEntity.getPrice(), productEntity.getId(), productEntity.getStocks());
     }
 

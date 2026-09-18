@@ -7,12 +7,15 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Component;
 
+import java.util.concurrent.ExecutionException;
+
 @Component
 @RequiredArgsConstructor
 public class InventoryEventPublisher implements InventoryEventPort {
 
     private static final String DECREASED_TOPIC = "inventory-decreased";
     private static final String DECREASE_FAILED_TOPIC = "inventory-decrease-failed";
+
     private final KafkaTemplate<String, Object> kafkaTemplate;
 
     @Override
@@ -20,23 +23,24 @@ public class InventoryEventPublisher implements InventoryEventPort {
         return false;
     }
 
-
-    //차감 성공했을경우에는 결제 서비스로 메세지 발행
     @Override
     public void publishDecreased(InventoryDecreasedEvent event) {
-        kafkaTemplate.send(
-                DECREASED_TOPIC,
-                event.orderId().toString(),
-                event
-        );
+        send(DECREASED_TOPIC, event.orderId().toString(), event);
     }
 
     @Override
     public void publishDecreaseFailed(InventoryDecreaseFailedEvent event) {
-        kafkaTemplate.send(
-                DECREASE_FAILED_TOPIC,
-                event.orderId().toString(),
-                event
-        );
+        send(DECREASE_FAILED_TOPIC, event.orderId().toString(), event);
+    }
+
+    private void send(String topic, String key, Object event) {
+        try {
+            kafkaTemplate.send(topic, key, event).get();
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            throw new IllegalStateException("Kafka 이벤트 발행 중 인터럽트 발생", e);
+        } catch (ExecutionException e) {
+            throw new IllegalStateException("Kafka 이벤트 발행 실패. topic=" + topic, e);
+        }
     }
 }

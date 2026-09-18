@@ -1,10 +1,10 @@
 package com.example.product_service.adapter.out.persistence.Event;
 
+import com.example.product_service.event.EventStatus;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 
 @Entity
 @Getter
@@ -15,11 +15,14 @@ public class EventEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String eventType;
+
+    @Enumerated(EnumType.STRING)
+    private EventStatus eventType;
+
     private String eventId;
 
     private EventEntity(
-            String eventType,
+            EventStatus eventType,
             String eventId
     ) {
         this.eventType = eventType;
@@ -27,7 +30,7 @@ public class EventEntity {
     }
 
     public static EventEntity create(
-            String eventType,
+            EventStatus eventType,
             String eventId
     ) {
         return new EventEntity(eventType, eventId);

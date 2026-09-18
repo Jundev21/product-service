@@ -3,6 +3,7 @@ package com.example.product_service.adapter.out.persistence.Event;
 import com.example.product_service.adapter.out.persistence.ProductRepository;
 import com.example.product_service.application.port.out.EventPort;
 import com.example.product_service.application.port.out.ProductInventoryPort;
+import com.example.product_service.event.EventStatus;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -18,7 +19,7 @@ public class EventAdapter implements EventPort {
     }
 
     @Override
-    public EventEntity save(String eventId, String eventType) {
+    public EventEntity save(String eventId, EventStatus eventType) {
         EventEntity eventEntity = EventEntity.create(eventType, eventId);
         return eventRepository.save(eventEntity);
     }

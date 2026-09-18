@@ -8,4 +8,10 @@ public interface ProcessOrderInventoryUseCase {
             Long productId,
             int quantity
     );
+
+    void failedProcess(
+            Long orderId,
+            Long productId,
+            int quantity
+    );
 }
