@@ -26,8 +26,13 @@ public class ProductInfoService implements ProductInfoUseCase {
     }
 
     @Override
-    public Product addNewProduct(String productName, int price, int productStocks) {
-        Product newProduct = new Product(productName, price, null, productStocks);
+    public Product addNewProduct(String productName,Long categoryId, int price, int productStocks) {
+        Product newProduct = new Product(
+                null,
+                productName,
+                categoryId,
+                price,
+                productStocks);
         return productInfoPort.save(newProduct);
     }
 }

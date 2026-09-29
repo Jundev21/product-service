@@ -11,6 +11,7 @@ public interface ProductInfoUseCase {
 
     Product addNewProduct(
             String productName,
+            Long categoryId,
             int price,
             int productStocks
     );

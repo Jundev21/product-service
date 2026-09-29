@@ -18,17 +18,20 @@ public class ProductPersistenceAdapter implements ProductInfoPort {
         ProductEntity productEntity =
                 new ProductEntity(
                         null,
-                        product.getProductName(),
-                        product.getPrice(),
-                        product.getProductStocks()
+                        product.productName(),
+                        product.categoryId(),
+                        product.price(),
+                        product.productStocks()
+
                 );
 
         ProductEntity savedProductEntity = productRepository.save(productEntity);
 
         return new Product(
-                savedProductEntity.getProductName(),
-                savedProductEntity.getPrice(),
                 savedProductEntity.getId(),
+                savedProductEntity.getProductName(),
+                savedProductEntity.getCategoryId(),
+                savedProductEntity.getPrice(),
                 savedProductEntity.getStocks()
         );
     }
@@ -40,7 +43,13 @@ public class ProductPersistenceAdapter implements ProductInfoPort {
         ProductEntity productEntity = productRepository.findById(productId).orElseThrow(
                 () -> new IllegalArgumentException("상품없음")
         );
-        return new Product(productEntity.getProductName(), productEntity.getPrice(), productEntity.getId(), productEntity.getStocks());
+        return new Product(
+                productEntity.getId(),
+                productEntity.getProductName(),
+                productEntity.getCategoryId(),
+                productEntity.getPrice(),
+                productEntity.getStocks()
+        );
     }
 
     @Override
@@ -48,7 +57,13 @@ public class ProductPersistenceAdapter implements ProductInfoPort {
         List<ProductEntity> productEntity = productRepository.findAll();
 
         return productEntity.stream().map(product ->
-                new Product(product.getProductName(), product.getPrice(), product.getId(), product.getStocks())
+                new Product(
+                        product.getId(),
+                        product.getProductName(),
+                        product.getCategoryId(),
+                        product.getPrice(),
+                        product.getStocks()
+                )
         ).toList();
 
     }

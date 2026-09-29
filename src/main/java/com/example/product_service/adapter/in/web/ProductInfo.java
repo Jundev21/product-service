@@ -22,7 +22,9 @@ public class ProductInfo {
     ) {
 
         Product product = productInfoUseCase.addNewProduct(
+
                 request.productName(),
+                request.categoryId(),
                 request.price(),
                 request.stocks()
         );

@@ -6,7 +6,15 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name="products")
+@Table(
+        name = "products",
+        indexes = {
+                @Index(
+                        name = "idx_products_category_price",
+                        columnList = "category_id, price"
+                )
+        }
+)
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ProductEntity {
@@ -16,6 +24,8 @@ public class ProductEntity {
 
     private String productName;
 
+    private Long categoryId;
+
     private int price;
 
     private int stocks;
@@ -23,11 +33,13 @@ public class ProductEntity {
     public ProductEntity(
             Long id,
             String productName,
+            Long categoryId,
             int price,
             int stocks
     ) {
         this.id = id;
         this.productName = productName;
+        this.categoryId = categoryId;
         this.price = price;
         this.stocks = stocks;
 

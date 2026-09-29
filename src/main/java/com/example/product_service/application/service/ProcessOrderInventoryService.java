@@ -54,7 +54,7 @@ public class ProcessOrderInventoryService implements ProcessOrderInventoryUseCas
                         orderId,
                         productId,
                         quantity,
-                        result.product().getPrice()
+                        result.product().price()
                 )
         );
     }

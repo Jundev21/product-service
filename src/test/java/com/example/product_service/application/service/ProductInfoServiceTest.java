@@ -44,10 +44,10 @@ class ProductInfoServiceTest {
                 100
         );
 
-        assertThat(result.getId()).isEqualTo(1L);
-        assertThat(result.getProductName()).isEqualTo("MacBook Pro");
-        assertThat(result.getPrice()).isEqualTo(2500000);
-        assertThat(result.getProductStocks()).isEqualTo(100);
+        assertThat(result.id()).isEqualTo(1L);
+        assertThat(result.productName()).isEqualTo("MacBook Pro");
+        assertThat(result.price()).isEqualTo(2500000);
+        assertThat(result.productStocks()).isEqualTo(100);
 
         verify(productInfoPort)
                 .save(org.mockito.ArgumentMatchers.any(Product.class));
@@ -72,8 +72,8 @@ class ProductInfoServiceTest {
                 productInfoService.productDetails(1L);
 
         // then
-        assertThat(result.getId()).isEqualTo(1L);
-        assertThat(result.getProductName())
+        assertThat(result.id()).isEqualTo(1L);
+        assertThat(result.productName())
                 .isEqualTo("MacBook Pro");
 
         verify(productInfoPort).searchProductDetail(1L);

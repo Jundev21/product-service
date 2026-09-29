@@ -12,6 +12,9 @@ public record CreateProductRequest(
         @Positive
         int price,
 
+        @Positive
+        Long categoryId,
+
         @PositiveOrZero
         int stocks
 ) {

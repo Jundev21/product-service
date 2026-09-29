@@ -1,26 +1,9 @@
 package com.example.product_service.domain.model;
 
 
-import lombok.Getter;
-
-import java.math.BigDecimal;
-
-@Getter
-public class Product {
-    private final Long id;
-    private final String productName;
-    private final int price;
-    private final int productStocks;
-
-    public Product(String productName, int price, Long id, int productStocks) {
-        this.productName = productName;
-        this.price = price;
-        this.id = id;
-        this.productStocks = productStocks;
-    }
-
+public record Product(Long id, String productName, Long categoryId, int price, int productStocks) {
     public static Product create(
-            String name, int price, int productStocks
+            Long id, String name, int price, int productStocks, Long categoryId
     ) {
 
         if (name == null || name.isBlank()) {
@@ -36,7 +19,7 @@ public class Product {
         }
 
         return new Product(
-                name, price, null, productStocks
+                id, name, categoryId, price, productStocks
         );
     }
 }

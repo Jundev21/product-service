@@ -11,10 +11,10 @@ public record ProductResponse(
 
     public static ProductResponse from(Product product) {
         return new ProductResponse(
-                product.getId(),
-                product.getProductName(),
-                product.getPrice(),
-                product.getProductStocks()
+                product.id(),
+                product.productName(),
+                product.price(),
+                product.productStocks()
         );
     }
 }

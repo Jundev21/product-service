@@ -35,6 +35,7 @@ class ProductInventoryConcurrencyTest {
         ProductEntity product = new ProductEntity(
                 null,
                 "MacBook Pro",
+                1L,
                 2500000,
                 100
         );

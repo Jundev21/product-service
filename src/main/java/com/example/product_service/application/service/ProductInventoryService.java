@@ -39,9 +39,11 @@ public class ProductInventoryService implements ProductInventoryUseCase {
         }
 
         Product resultProduct = Product.create(
+                product.getId(),
                 product.getProductName(),
                 product.getPrice(),
-                product.getStocks()
+                product.getStocks(),
+                product.getCategoryId()
         );
 
         return InventoryDecreaseResult.success(resultProduct);
